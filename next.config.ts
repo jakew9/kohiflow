@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  /* Trigger Build: 2026-05-21 */
 };
 
 export default nextConfig;

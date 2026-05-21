@@ -1,6 +1,6 @@
-import { initializeApp, getApps, getApp } from "firebase/app";
-import { getAuth, indexedDBLocalPersistence, initializeAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { initializeApp, getApps, getApp, FirebaseApp } from "firebase/app";
+import { getAuth, indexedDBLocalPersistence, initializeAuth, Auth } from "firebase/auth";
+import { getFirestore, Firestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -13,19 +13,26 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+console.log("Initializing Firebase...");
+const app: FirebaseApp = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+console.log("Firebase App initialized:", app.name);
 
 // For Native/Capacitor, we need to explicitly initialize Auth with IndexedDB persistence
 // to prevent the "stuck loading" state on restarts.
-let auth;
+let auth: Auth;
 try {
+  console.log("Attempting to get Auth...");
   auth = getAuth(app);
+  console.log("Standard Auth retrieved.");
 } catch (e) {
+  console.log("Initializing Auth with persistence...");
   auth = initializeAuth(app, {
     persistence: indexedDBLocalPersistence
   });
+  console.log("Persistence Auth initialized.");
 }
 
-const db = getFirestore(app);
+const db: Firestore = getFirestore(app);
+console.log("Firestore initialized.");
 
 export { app, auth, db };

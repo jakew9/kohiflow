@@ -44,6 +44,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = async () => {
     try {
       await signOut(auth);
+      window.location.href = "/";
     } catch (error) {
       console.error("Error signing out:", error);
     }

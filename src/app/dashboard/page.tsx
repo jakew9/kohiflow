@@ -5,6 +5,8 @@ import Link from "next/link";
 import { Coffee, Droplets, Zap, History, BookOpen, Settings, LogOut } from "lucide-react";
 import { ChemexIcon, MokaPotIcon } from "@/components/ui/CustomIcons";
 import { useAuth } from "@/lib/auth-provider";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 const BREW_METHODS = [
   { id: 'drip', name: 'Drip', icon: Droplets, path: '/brew/drip' },
@@ -14,7 +16,22 @@ const BREW_METHODS = [
 ];
 
 export default function Dashboard() {
-  const { user, logout } = useAuth();
+  const { user, loading, logout } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push("/");
+    }
+  }, [user, loading, router]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-matte-black flex items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-walnut border-t-transparent" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-matte-black p-8 text-foreground">
